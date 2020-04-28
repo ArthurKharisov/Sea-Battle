@@ -1,0 +1,170 @@
+* {
+    margin: 0;
+    font-family: sans-serif;
+    font-size: 16px;
+}
+
+body {
+    background-color: #ebebeb;
+}
+
+.wrapper {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.header {
+    background-color: #c8e300;
+    height: 50px;
+    border-radius: 0 0 10px 10px;
+}
+
+.header__title {
+    line-height: 50px;
+    text-align: center;
+    color: white;
+    font-size: 1.5em;
+    text-shadow: 0px 1px 0px grey;
+}
+
+.game {
+    background-color: white;
+    width: 95%;
+    margin: 0 auto;
+    border-radius: 0 0 10px 10px;
+    padding: 20px 10px;
+    text-align: center;
+}
+
+.game__title {
+    font-size: 1.3em;
+    margin-bottom: 15px;
+}
+
+.game__fields {
+    display: flex;
+    justify-content: center;
+}
+
+.game__info {
+    width: 100px;
+    align-self: center;
+    margin: 15px;
+}
+
+.game__field {
+    height: 320px;
+    width: 320px;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    display: flex;
+    flex-direction: column;
+}
+
+.game__field-title {
+    color:grey;
+    font-size: 0.8em;
+}
+
+.game__field-row {
+    display: flex;
+}
+
+.game__field_enemy {
+    cursor: pointer;
+}
+
+.game__block {
+    height: 31px;
+    width: 31px;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    transition: background 0.3s ease-in-out;
+}
+
+.game__block:hover {
+    opacity: 0.5;
+    background-color: grey;
+}
+
+.game__block.hit {
+    background: url('../img/field/hit.png');
+    cursor: default;
+}
+
+.game__block.miss {
+    background: url('../img/field/point.png');
+    cursor: default;
+}
+
+.game__buttons {
+    display: flex;
+    flex-direction: column;
+    margin:20px;
+}
+
+.game__button {
+    align-self: center;
+    background-color: #37d65f;
+	border-radius: 10px;
+    width: 200px;
+	display: block;
+	cursor: pointer;
+	color: #ffffff;
+	padding: 16px 31px;
+    margin: 10px 10px 0;
+	text-decoration: none;
+	text-shadow: 0px 1px 0px #2f6627;
+}
+
+.game__button:hover {
+    background-color:#7ed64f;
+}
+
+.game__button:active {
+    position: relative;
+    top: 1px;
+}
+
+.game__informer-text {
+    width: 70%;
+    max-width: calc(100% - 20px);
+    min-width: 50%;
+    min-height: 200px;
+    max-height: 500px;
+    height: 200px;
+    cursor: default;
+    border-color: #ededed;
+    padding: 10px;
+}
+
+@media screen and (max-width: 1280px){
+    .wrapper {
+        width: 80%;
+    } 
+}
+
+@media screen and (max-width: 991px){
+    .wrapper {
+        width: 95%;
+    } 
+}
+
+@media screen and (max-width: 791px){
+    .wrapper {
+        width: 100%;
+    } 
+}
+
+@media screen and (max-width: 750px){
+    .game__fields {
+        flex-direction: column;
+        align-items: center;
+    }
+    .header {
+        border-radius: 0;
+    }
+    .game {
+        width: 100%;
+    }
+}
