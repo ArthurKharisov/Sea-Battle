@@ -91,11 +91,13 @@ body {
 .game__block.hit {
     background: url('../img/field/hit.png');
     cursor: default;
+    background-size: cover;
 }
 
 .game__block.miss {
     background: url('../img/field/point.png');
     cursor: default;
+    background-size: cover;
 }
 
 .game__block.ship {
@@ -113,7 +115,7 @@ body {
     align-self: center;
     background-color: #37d65f;
 	border-radius: 10px;
-    width: 200px;
+    width: 180px;
 	display: block;
 	cursor: pointer;
 	color: #ffffff;
@@ -121,6 +123,11 @@ body {
     margin: 10px 10px 0;
 	text-decoration: none;
 	text-shadow: 0px 1px 0px #2f6627;
+}
+
+.game__input {
+    width: 232px;
+    height: 31px;
 }
 
 .game__button:hover {
@@ -176,5 +183,19 @@ body {
     }
     .game {
         width: 100%;
+    }
+}
+
+@media screen and (max-width: 425px){
+    .game {
+        padding: 20px 0;
+    }
+    .game__field {
+        width: 280px;
+        height: 280px;
+    }
+    .game__block {
+        width: 27px;
+        height: 27px;
     }
 }
