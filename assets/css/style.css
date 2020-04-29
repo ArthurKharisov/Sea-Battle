@@ -59,6 +59,7 @@ body {
     border-top: 1px solid black;
     display: flex;
     flex-direction: column;
+    transition: opacity 0.3s ease-in-out;
 }
 
 .game__field-title {
@@ -97,6 +98,11 @@ body {
     cursor: default;
 }
 
+.game__block.ship {
+    background-color: blue;
+    cursor: default;
+}
+
 .game__buttons {
     display: flex;
     flex-direction: column;
@@ -124,6 +130,10 @@ body {
 .game__button:active {
     position: relative;
     top: 1px;
+}
+
+.game__informer {
+    margin-top: 30px;
 }
 
 .game__informer-text {
