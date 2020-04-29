@@ -94,6 +94,16 @@ body {
     background-size: cover;
 }
 
+.game__block.enemy {
+    background-color: #ffc83f;
+    cursor: default;
+}
+
+.game__block.missed {
+    background-color: #a5beff;
+    cursor: default;
+}
+
 .game__block.miss {
     background: url('../img/field/point.png');
     cursor: default;

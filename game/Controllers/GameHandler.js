@@ -17,6 +17,9 @@ define('game/Controllers/GameHandler.js', [
             // Текущий игрок
             this.currentPlayer;
 
+            this.enemyHit = 0;
+            this.playerHit = 0;
+
             // Элементы страницы
             this.el = {};
         }
@@ -36,6 +39,8 @@ define('game/Controllers/GameHandler.js', [
          */
         playerShoot(e) {
             init.shoot(0, e.target.dataset.x, e.target.dataset.y);
+            if(init.playerHit == 20) init.end(0);
+            console.log(init.playerHit);
         }
 
         /**
@@ -80,6 +85,7 @@ define('game/Controllers/GameHandler.js', [
                 this.el.playerField.style.opacity = "1";
                 this.enemyStep();
             } else {
+                if (this.enemyHit == 20) this.end(1);
                 this.currentPlayer = 0;
                 this.el.infoBar.innerText = "Ваш ход";
                 this.el.enemyField.style.opacity = "1";
@@ -94,6 +100,9 @@ define('game/Controllers/GameHandler.js', [
          */
         start() {
             this.inits();
+
+
+
             if (this.random(2) == 0) {
                 this.currentPlayer = 1;
                 this.togglePlayer();
@@ -106,8 +115,8 @@ define('game/Controllers/GameHandler.js', [
         /**
          * Конец игры
          */
-        end() {
-            this.currentPlayer = 3;
+        end(player = 2) {
+            this.currentPlayer = 2;
             this.el.infoBar.innerText = "";
             this.el.enemyField.style.opacity = "1";
             this.el.playerField.style.opacity = "1";
@@ -117,8 +126,19 @@ define('game/Controllers/GameHandler.js', [
             this.el.button.className = "game__buttons";
             this.el.button.innerHTML = new Controls("again");
             document.querySelector(".game").appendChild(this.el.button);
-            this.inform(0,"surrend");
             this.removeListener();
+            if ((player == 2)||(player == 1)) {
+                (player == 2) ? this.inform(0,"surrend") : this.inform(player,"win");
+                for (let i = 0; i < 10; i++) {
+                    for (let j = 0; j < 10; j++) {
+                        if (this.enemy[i][j] == 2) {
+                            this.el.enemyField.querySelector(`[data-x="${i}"][data-y="${j}"]`).classList.add("missed");
+                        }
+                    }
+                }
+            } else if (player == 0) {
+                this.inform(player,"win");
+            }
         }
 
         /**
@@ -135,7 +155,7 @@ define('game/Controllers/GameHandler.js', [
             let x;
             let y;
             let f = false;
-            let clock = (this.random(2)) * 100;
+            let clock = 500+((this.random(5)) * 1000);
 
             while (f == false) {
                 x = this.random(10);
@@ -144,19 +164,29 @@ define('game/Controllers/GameHandler.js', [
             }
             setTimeout(() => {
                 if(this.currentPlayer == 1) this.shoot(1, x, y);
+                if(this.enemyHit == 20) this.end(1);
             }, clock);
         }
 
-        checkNear(xOld, yOld, x, y, arr) {
+        checkNear(shoot, xOld, yOld, x, y, arr) {
             let f = false;
             for (let i = -1; i < 2; i++) {
                 for (let j = -1; j < 2; j++) {
                     if (!(i == 0 && j == 0)) {
                         if ((arr[x + i][y + j] == 2)) {
-                            f = true;
+                            return true;
                         }
                         if ((arr[x + i][y + j] == 4) && !(xOld == (x + i) && yOld == (y + j))) {
-                            f = this.checkNear(x, y, x + i, y + j, arr);
+                            f = (shoot==0) ? this.checkNear(0, x, y, (x + i), (y + j), arr) : this.checkNear(1, x, y, (x + i), (y + j), arr);
+                            if((this.currentPlayer == 0)&&(shoot==1)){
+                                let slot = this.el.enemyField.querySelector(`[data-x="${x + i}"][data-y="${y + j}"]`);
+                                slot.classList.add("enemy");
+                            }
+                        }
+                        if((shoot==1)&&(arr[x + i][y + j] == 1)) {
+                            if (((x + i >= 0) && (x + i <= 9)) && ((y + j >= 0) && (y + j <= 9))) {
+                                this.shoot(this.currentPlayer, (x + i), (y + j), false);
+                            }
                         }
                     }
                 }
@@ -194,7 +224,9 @@ define('game/Controllers/GameHandler.js', [
                         }
                     }
                 }
-            } else if (values.includes(2)) {
+                if (player==0) element[0]= field.querySelector(`[data-x="${x}"][data-y="${y}"]`).classList.add("enemy");
+                this.inform(player, "destroy");
+            } else {
                 for (let i = -1; i < 2; i++) {
                     for (let j = -1; j < 2; j++) {
                         if ((!i == 0 && !j == 0)) {
@@ -204,14 +236,27 @@ define('game/Controllers/GameHandler.js', [
                         }
                     }
                 }
-            } else if (values.includes(4)) {
-                let f = false;
-                for (let i = -1; i < 2; i++) {
-                    for (let j = -1; j < 2; j++) {
-                        if (!(i == 0 && j == 0)) {
-                            if (arr[x + i][y + j] == 4) {
-                                f = this.checkNear(x, y, x + i, x + j, arr);
+                if ((values.includes(4))&&!(values.includes(2))) {
+                    let xNew;
+                    let yNew;
+                    let f = false;
+                    for (let i = -1; i < 2; i++) {
+                        for (let j = -1; j < 2; j++) {
+                            if (!(i == 0 && j == 0)) {
+                                if (arr[x + i][y + j] == 4) {
+                                    xNew = x + i;
+                                    yNew = y + j;
+                                    f = this.checkNear(0, x, y, xNew, yNew, arr);
+                                }
                             }
+                        }
+                    }
+                    if(!f) {
+                        this.checkNear(1, -1, -1, x, y, arr);
+                        if(player==0) {
+                            let slot = this.el.enemyField.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+                            this.inform(player, "destroy");
+                            slot.classList.add("enemy");
                         }
                     }
                 }
@@ -233,6 +278,7 @@ define('game/Controllers/GameHandler.js', [
                 element = this.el.enemyField.querySelector(`[data-x="${x}"][data-y="${y}"]`);
                 if (this.enemy[x][y] == 2) {
                     element.classList.add("hit");
+                    this.playerHit++;
                     this.enemy[x][y] = 4;
                     if (sw == true) {
                         this.shootnear(player, x, y);
@@ -253,6 +299,7 @@ define('game/Controllers/GameHandler.js', [
                 element = this.el.playerField.querySelector(`[data-x="${x}"][data-y="${y}"]`);
                 if (this.main[x][y] == 2) {
                     element.classList.add("hit");
+                    this.enemyHit++;
                     this.main[x][y] = 4;
                     if (sw == true) {
                         this.inform(player, "hit", x, y);
@@ -292,8 +339,14 @@ define('game/Controllers/GameHandler.js', [
                     case "miss":
                         this.el.info.value = `${urlParams.get('name')}: ${x}:${y} - мимо\n${this.el.info.value}`;
                         break;
+                    case "destroy":
+                        this.el.info.value = `${urlParams.get('name')} - уничтожил корабль!\n${this.el.info.value}`;
+                        break;
                     case "surrend":
                         this.el.info.value = `${urlParams.get('name')} сдается\n${this.el.info.value}`;
+                        break;
+                    case "win":
+                        this.el.info.value = `${urlParams.get('name')} победил!\n${this.el.info.value}`;
                         break;
                 }
 
@@ -304,6 +357,12 @@ define('game/Controllers/GameHandler.js', [
                         break;
                     case "miss":
                         this.el.info.value = `Компьютер: ${x}:${y} - мимо\n${this.el.info.value}`;
+                        break;
+                    case "destroy":
+                        this.el.info.value = `Компьютер - уничтожил корабль\n${this.el.info.value}`;
+                        break;
+                    case "win":
+                        this.el.info.value = `Компьютер победил\n${this.el.info.value}`;
                         break;
                 }
             }
