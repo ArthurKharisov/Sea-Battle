@@ -45,7 +45,7 @@ define('game/Controllers/GameHandler.js', [
          * @param e
          */
         playerShoot(e) {
-            if(e.target.className.match("game__block")) init.shoot(0, e.target.dataset.x, e.target.dataset.y);
+            if (e.target.className.match("game__block")) init.shoot(0, e.target.dataset.x, e.target.dataset.y);
             if (init.playerHit == 20) init.end(0);
         }
 
@@ -171,12 +171,23 @@ define('game/Controllers/GameHandler.js', [
             let f = false;
             let clock = 500 + ((this.random(4)) * 1000); // время шага
             let arr = this.main;
-
+            x = this.random(10);
+            y = this.random(10);
             while (f == false) {
                 if (!this.isHit) { // если предыдущий встрел не попал
-                    x = this.random(10);
-                    y = this.random(10);
-                    if ((this.main[x][y] !== 3) && (this.main[x][y] !== 4)) f = true;
+                    if ((this.main[x][y] !== 3) && (this.main[x][y] !== 4)) {
+                        f = true;
+                    } else { // если сгенерированное число попало либо в уничтоженный корабль, либо в клетку в которую уже был произведен выстрел, то берем след. координату
+                        if ((y + 1 <= 9) && (y + 1 >= 0)) {
+                            y++;
+                        } else if ((x + 1 <= 9) && (x + 1 >= 0)) {
+                            x++;
+                            y = 0;
+                        } else {
+                            x = 0;
+                            y = 0;
+                        }
+                    }
                 } else { // если предыдущий встрел попал
                     let coord = {
                         x: -1,
@@ -267,13 +278,13 @@ define('game/Controllers/GameHandler.js', [
                             f = true;
                         }
                     }
-
                 }
             }
             setTimeout(() => {
                 if (this.currentPlayer == 1) this.shoot(1, x, y);
                 if (this.enemyHit == 20) this.end(1);
             }, clock);
+
         }
 
         /**
@@ -433,7 +444,8 @@ define('game/Controllers/GameHandler.js', [
             let queryString = window.location.search;
             let urlParams = new URLSearchParams(queryString);
             let name = (player == 0) ? urlParams.get('name') : "Компьютер";
-            x++;y++;
+            x++;
+            y++;
             switch (message) {
                 case "hit":
                     this.el.info.value = `${name}: ${x}:${y} - попал!\n${this.el.info.value}`;
