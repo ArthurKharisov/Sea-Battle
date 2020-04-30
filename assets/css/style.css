@@ -47,7 +47,7 @@ body {
 }
 
 .game__info {
-    width: 100px;
+    min-width: 100px;
     align-self: center;
     margin: 15px;
 }
@@ -165,7 +165,7 @@ body {
     padding: 10px;
 }
 
-@media screen and (max-width: 1280px){
+@media screen and (max-width: 1380px){
     .wrapper {
         width: 80%;
     } 
@@ -173,20 +173,20 @@ body {
 
 @media screen and (max-width: 991px){
     .wrapper {
-        width: 95%;
-    } 
-}
-
-@media screen and (max-width: 791px){
-    .wrapper {
         width: 100%;
     } 
 }
 
-@media screen and (max-width: 750px){
+@media screen and (max-width: 861px){
     .game__fields {
         flex-direction: column;
         align-items: center;
+    }
+    .game__info {
+        width: 150px;
+        height: 30px;
+        line-height: 30px;
+        margin: 15px 0 10px;
     }
     .header {
         border-radius: 0;

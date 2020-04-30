@@ -45,7 +45,7 @@ define('game/Controllers/GameHandler.js', [
          * @param e
          */
         playerShoot(e) {
-            init.shoot(0, e.target.dataset.x, e.target.dataset.y);
+            if(e.target.className.match("game__block")) init.shoot(0, e.target.dataset.x, e.target.dataset.y);
             if (init.playerHit == 20) init.end(0);
         }
 
@@ -141,7 +141,9 @@ define('game/Controllers/GameHandler.js', [
             this.el.button.innerHTML = new Controls("again");
             document.querySelector(".game").appendChild(this.el.button);
             this.removeListener();
-            if ((player == 2) || (player == 1)) {
+            if (player == 0) {
+                this.inform(player, "win");
+            } else {
                 (player == 2) ? this.inform(0, "surrend") : this.inform(player, "win");
                 for (let i = 0; i < 10; i++) {
                     for (let j = 0; j < 10; j++) {
@@ -150,8 +152,6 @@ define('game/Controllers/GameHandler.js', [
                         }
                     }
                 }
-            } else if (player == 0) {
-                this.inform(player, "win");
             }
         }
 
@@ -433,6 +433,7 @@ define('game/Controllers/GameHandler.js', [
             let queryString = window.location.search;
             let urlParams = new URLSearchParams(queryString);
             let name = (player == 0) ? urlParams.get('name') : "Компьютер";
+            x++;y++;
             switch (message) {
                 case "hit":
                     this.el.info.value = `${name}: ${x}:${y} - попал!\n${this.el.info.value}`;
