@@ -48,6 +48,7 @@ body {
 
 .game__info {
     min-width: 100px;
+    max-width: 100px;
     align-self: center;
     margin: 15px;
 }
