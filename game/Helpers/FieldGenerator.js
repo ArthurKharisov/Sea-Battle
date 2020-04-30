@@ -25,11 +25,11 @@ define('game/Helpers/FieldGenerator.js', function () {
              */
             function generateShip(size, count, array) {
                 for (let k = 1; k <= count; k++) {
-                    let type = random(2);
+                    let type = random(2); // расположение корабля 0 - вертикально, 1 - горизонтально
                     let f = true;
                     let x;
                     let y;
-                    if (type == 0) {
+                    if (type == 0) { // генерация вертикального корабля
                         while (f) {
                             f = false;
                             x = random(10 - size);
@@ -41,7 +41,7 @@ define('game/Helpers/FieldGenerator.js', function () {
                             }
                         }
                         for (let i = 0; i < size; i++) {
-                            if (i == 0) {
+                            if (i == 0) { // если точка начало корабля, то зменяем вокруг нее точки на 1
                                 array[x - 1][y - 1] = 1;
                                 array[x - 1][y] = 1;
                                 array[x - 1][y + 1] = 1;
@@ -51,16 +51,16 @@ define('game/Helpers/FieldGenerator.js', function () {
                                 array[x + i][y - 1] = 1;
                                 array[x + i][y + 1] = 1;
                             }
-                            if (i == size - 1) {
+                            if (i == size - 1) { // если точка конец корабля, то зменяем вокруг нее точки на 1
                                 array[x + i + 1][y - 1] = 1;
                                 array[x + i + 1][y] = 1;
                                 array[x + i + 1][y + 1] = 1;
                                 array[x + i][y - 1] = 1;
                                 array[x + i][y + 1] = 1;
                             }
-                            array[x + i][y] = 2;
+                            array[x + i][y] = 2; // точка корабля
                         }
-                    } else {
+                    } else { // генерация горизонтального корабля
                         while (f) {
                             f = false;
                             x = random(10);
@@ -72,7 +72,7 @@ define('game/Helpers/FieldGenerator.js', function () {
                             }
                         }
                         for (let i = 0; i < size; i++) {
-                            if (i == 0) {
+                            if (i == 0) { // если точка начало корабля, то зменяем вокруг нее точки на 1
                                 array[x - 1][y] = 1;
                                 array[x - 1][y - 1] = 1;
                                 array[x][y - 1] = 1;
@@ -82,20 +82,21 @@ define('game/Helpers/FieldGenerator.js', function () {
                                 array[x - 1][y + i] = 1;
                                 array[x + 1][y + i] = 1;
                             }
-                            if (i == size - 1) {
+                            if (i == size - 1) { // если точка конец корабля, то зменяем вокруг нее точки на 1
                                 array[x - 1][y + i] = 1;
                                 array[x - 1][y + i + 1] = 1;
                                 array[x][y + i + 1] = 1;
                                 array[x + 1][y + i + 1] = 1;
                                 array[x + 1][y + i] = 1;
                             }
-                            array[x][y + i] = 2;
+                            array[x][y + i] = 2; // точка корабля
                         }
                     }
                 }
                 return array;
             }
 
+            // генерация поля
             let arr = [];
             for (let i = -1; i <= 10; i++) {
                 arr[i] = [];
@@ -104,6 +105,7 @@ define('game/Helpers/FieldGenerator.js', function () {
                 }
             }
 
+            // генерация кораблей
             let n = 5;
             for (let i = 1; i < n; i++) {
                 generateShip(n - i, i, arr);

@@ -55,7 +55,6 @@ define('game/Controllers/GamePage.js', [
         afterRender() {
             document.querySelector(".game__button_replace").addEventListener("click", this.buttonReplace);
             document.querySelector(".game__button_start").addEventListener("click", this.buttonStart);
-
         }
 
     }

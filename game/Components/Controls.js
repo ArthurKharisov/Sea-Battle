@@ -17,11 +17,21 @@ define('game/Components/Controls.js', ['game/Components/Component.js'], function
          * @returns {string}
          */
         render() {
-            let str;
-            if (this.type == "start") str = this.renderStartButton();
-            if (this.type == "surrender") str = this.renderSurrendButton();
-            if (this.type == "again") str = this.renderAgainButton();
-            if (this.type == "name") str = this.renderChangeNameButton();
+            let str = "";
+            switch(this.type){
+                case "start":
+                    str = this.renderStartButton();
+                    break;
+                case "surrender":
+                    str = this.renderSurrendButton();
+                    break;
+                case "again":
+                    str = this.renderAgainButton();
+                    break;
+                case "name":
+                    str = this.renderChangeNameButton();
+                    break;
+            }
             return str;
         }
 
